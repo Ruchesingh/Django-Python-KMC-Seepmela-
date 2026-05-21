@@ -12,4 +12,4 @@ class Student(models.Model):
     def __str__(self):
         return f'{self.name}'
     class Meta:
-        db_table="student"
+        db_table="student"                                                                                                                                                      
