@@ -1,9 +1,11 @@
 from django.shortcuts import redirect, render
+from django.contrib.auth.decorators import login_required
 
 
 
 # Create your views here.
 # display all the list of teacher
+@login_required()
 def teacher_list(request):
     data = Teacher.objects.all()
     context = {
@@ -12,6 +14,7 @@ def teacher_list(request):
     return render(request, 'teacher/index.html', context)
 
 # create a new teacher
+@login_required(login_url='/user/login')
 def teacher_create(request):
     form = TeacherForm()
 
