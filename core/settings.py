@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'home',
     'teacher',
     'movie',
+    'user',
 ]
 
 MIDDLEWARE = [
@@ -53,6 +54,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'core.urls'
+LOGIN_URL='/user/login'
 
 TEMPLATES = [
     {

@@ -1,17 +1,9 @@
-<html>
-<head>
-    <title>Update Grade</title>
-</head>
-<body>
-
-<h2>Update Grade</h2>
-
-<form method="POST">
+<form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-
-    <button type="submit">Save</button>
+    
+    <button type="submit" class= "btn btn-success">Update</button>
+    <a href="{% url 'teacher' %}" class="btn btn-danger">
+        Back
+    </a>
 </form>
-
-</body>
-</html>

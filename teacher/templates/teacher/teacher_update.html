@@ -1,0 +1,9 @@
+<form method ="post">
+    {% csrf_token %}
+    {{form.as_p}}
+
+    <button type="submit" class="btn btn-success">Update</button>
+    <a href="{% url 'teacher' %}" class="btn btn-danger">
+        Back
+    </a>
+</form>

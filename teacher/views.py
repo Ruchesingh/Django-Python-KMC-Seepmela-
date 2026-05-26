@@ -1,13 +1,9 @@
+from django.shortcuts import redirect, render
+
+
+
 # Create your views here.
-from django.shortcuts import render
-from django.shortcuts import render, redirect
-
-import teacher
-from teacher.form import GradeForm, TeacherForm
-from teacher.models import Grade, Teacher
-
-#Teacher...
-
+# display all the list of teacher
 def teacher_list(request):
     data = Teacher.objects.all()
     context = {
@@ -15,19 +11,26 @@ def teacher_list(request):
     }
     return render(request, 'teacher/index.html', context)
 
+# create a new teacher
 def teacher_create(request):
-    teacher_form = TeacherForm()
-    if request.method == "POST":
-        teacher_form = TeacherForm(data=request.POST)
-        if teacher_form.is_valid():
-            teacher_form.save()
-            return redirect('/grade/teacher')
-    context = {
-        "form":teacher_form
-    }
-    return render(request,'teacher/teacher_create.html', context)
-def teacher_update(request, id):
+    form = TeacherForm()
 
+    if request.method == "POST":
+        form = TeacherForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            return redirect('teacher')   # use URL name
+        else:
+            print(form.errors)   # IMPORTANT
+
+    return render(request, 'teacher/teacher_create.html', {
+        'form': form
+    })
+
+# update the data of teacher
+def teacher_update(request, id):
+    teacher = Teacher.objects.get(id=id)
     form = TeacherForm(instance=teacher)
 
     if request.method == "POST":
@@ -35,52 +38,62 @@ def teacher_update(request, id):
 
         if form.is_valid():
             form.save()
-            return redirect('teacher_list')
+            return redirect('teacher')
+        else:
+            print(form.errors)
 
-    context = {
+    return render(request, 'teacher/teacher_update.html', {
         'form': form
-    }
-    return render(request, 'teacher/teacher_update.html', context)
+    })
 
+# delete the teacher from the list
 def teacher_delete(request, id):
     teacher = Teacher.objects.filter(id=id).delete()
-    return redirect('/teacher/teacher_list')
+    return redirect('teacher')
 
-# Grade...
+
+from teacher.form import TeacherForm
+from teacher.form import GradeForm
+from teacher.models import Grade, Teacher
+
 
 def grade_list(request):
     grades = Grade.objects.all()
-    context = {
+    return render(request, 'grade/index.html', {
         'grades': grades
-    }
-    return render(request, 'grade/index.html', context)
+    })
+
 
 def grade_create(request):
     form = GradeForm()
 
     if request.method == "POST":
         form = GradeForm(request.POST)
-
         if form.is_valid():
             form.save()
-            return redirect('grade_list')
+            return redirect('grade')
 
-    context = {
+    return render(request, 'grade/grade_create.html', {
         'form': form
-    }
-    return render(request, 'grade/grade_create.html', context)
+    })
+
 
 def grade_update(request, id):
-
-    form = GradeForm(instance=Grade)
+    grade = Grade.objects.get(id=id)
+    form = GradeForm(instance=grade)
 
     if request.method == "POST":
-        form = GradeForm(request.POST, instance=Grade)
-
+        form = GradeForm(request.POST, instance=grade)
         if form.is_valid():
             form.save()
-            return redirect('grade_list')
-        
+            return redirect('grade')
+
+    return render(request, 'grade/grade_update.html', {
+        'form': form
+    })
+
+
 def grade_delete(request, id):
-    grade = Grade.objects.filter(id=id).delete()
-    return redirect('/grade/grade_list')        
+    grade = Grade.objects.get(id=id)
+    grade.delete()
+    return redirect('grade')
