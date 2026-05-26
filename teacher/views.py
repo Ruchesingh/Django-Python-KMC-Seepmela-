@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
-
+from django.views.generic.list import ListView, CreateView, UpdateView
 
 
 # Create your views here.
@@ -13,6 +13,24 @@ def teacher_list(request):
     }
     return render(request, 'teacher/index.html', context)
 
+class TeacherView(ListView):
+    model = Teacher
+    template_name = "teacher/index.html"
+    context_object_name = 'teacher'
+
+class TeacherCreate(CreateView):
+    model = Teacher
+    form_class = TeacherForm
+    template_name = "teacher/create.html"
+    success_url = '/teacher/teacher'
+
+
+class TeacherUpdate(UpdateView):
+    model = Teacher
+    form_class = TeacherForm
+    template_name = "teacher/update.html"
+    success_url = '/teacher/teacher'
+    
 # create a new teacher
 @login_required(login_url='/user/login')
 def teacher_create(request):
